@@ -1,12 +1,12 @@
-5208b35369dcac495f15989bbddeccff *DESCRIPTION
+d1a7072279e978a9ac96d16dc04bf2a9 *DESCRIPTION
 c8dc8faad09698cceb0def6b17f1a28e *LICENSE
-54251c64d1edb1f030fc6084b517f58a *NAMESPACE
-a9d873ca72a4db5cc3d59417dbc1ddef *NEWS
+b5ce1df2acbbbfbaa3027ad693d11a9c *NAMESPACE
+741ce62f7e6772eb964db5aa7161be94 *NEWS
 64f0deb761ba7c370b4e887bba1db650 *R/colors.R
 d61479dcc2b35f566a47de2ddffb19ba *R/controls.R
 e36a3cb614788401f18596507f44c89f *R/data.R
 134e3ba3374a00508e914b92d453a202 *R/layers.R
-56bb61964e9e1568d9f7ab2451c36940 *R/leaflet.R
+798c9129125e51337e0ffbcddc78b42d *R/leaflet.R
 d5f63d6c1b77243b045d9d8b04a69380 *R/legacy.R
 a125f445b37c0ef46a04e86f9b446d8e *R/legend.R
 40ff6926aa4fafce61ce0c51ced5bdf3 *R/methods.R
@@ -17,7 +17,7 @@ c091247962cda80b3cb70d554e9fec36 *R/plugin-providers.R
 96c2efe5e920adda73b40e6f0d71319a *R/shiny.R
 c14de810bcc560afdabe777ada98ef0e *R/utils.R
 725632636dbb0d94acd7e1fb049345b2 *README.md
-dc6011b6d0e251efeb55716f8fdc5d91 *inst/htmlwidgets/leaflet.js
+8b2e30584c604cbeb7bbf701b4bebed7 *inst/htmlwidgets/leaflet.js
 540befcbed4b1d5eded3e76d6b36a161 *inst/htmlwidgets/leaflet.yaml
 8101d596b2b8fa35fe3a634ea342d7c3 *inst/htmlwidgets/lib/jquery/jquery.min.js
 dc7d94072f2e469266e68c41915f5244 *inst/htmlwidgets/lib/leaflet-omnivore/index.js

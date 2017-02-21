@@ -18,7 +18,7 @@
 #'   \code{map} object that was passed in, possibly modified.
 #'
 #' @export
-dispatch = function(map,
+dispatch <- function(map,
   funcName,
   leaflet = stop(paste(funcName, "requires a map proxy object")),
   leaflet_proxy = stop(paste(funcName, "does not support map proxy objects"))
@@ -31,8 +31,10 @@ dispatch = function(map,
     stop("Invalid map parameter")
 }
 
-# remove NULL elements from a list
-filterNULL = function(x) {
+#' remove NULL elements from a list
+#' @param x A list whose NULL elements will be filtered
+#' @export
+filterNULL <- function(x) {
   if (length(x) == 0 || !is.list(x)) return(x)
   x[!unlist(lapply(x, is.null))]
 }
@@ -42,8 +44,16 @@ filterNULL = function(x) {
 #' @param method the name of the JavaScript method to invoke
 #' @param ... unnamed arguments to be passed to the JavaScript method
 #' @rdname dispatch
+#' @import crosstalk
 #' @export
-invokeMethod = function(map, data, method, ...) {
+invokeMethod <- function(map, data, method, ...) {
+  if (crosstalk::is.SharedData(data)) {
+    map$dependencies <- c(map$dependencies, crosstalk::crosstalkLibs())
+    data <- data$data()
+  } else {
+    NULL
+  }
+
   args = evalFormula(list(...), data)
 
   dispatch(map,
@@ -86,7 +96,8 @@ invokeMethod = function(map, data, method, ...) {
 #' execute on the live Leaflet map instance.
 #'
 #' @param mapId single-element character vector indicating the output ID of the
-#'   map to modify
+#'   map to modify (if invoked from a Shiny module, the namespace will be added
+#'   automatically)
 #' @param session the Shiny session object to which the map belongs; usually the
 #'   default value will suffice
 #' @param data a data object; see Details under the \code{\link{leaflet}} help
@@ -130,6 +141,21 @@ leafletProxy <- function(mapId, session = shiny::getDefaultReactiveDomain(),
     stop("leafletProxy must be called from the server function of a Shiny app")
   }
 
+  # If this is a new enough version of Shiny that it supports modules, and
+  # we're in a module (nzchar(session$ns(NULL))), and the mapId doesn't begin
+  # with the current namespace, then add the namespace.
+  #
+  # We could also have unconditionally done `mapId <- session$ns(mapId)`, but
+  # older versions of Leaflet would have broken unless the user did session$ns
+  # themselves, and we hate to break their code unnecessarily.
+  #
+  # This won't be necessary in future versions of Shiny, as session$ns (and
+  # other forms of ns()) will be smart enough to only namespace un-namespaced
+  # IDs.
+  if (!is.null(session$ns) && nzchar(session$ns(NULL)) && !startsWith(mapId, session$ns(""))) {
+    mapId <- session$ns(mapId)
+  }
+
   structure(
     list(
       session = session,
@@ -162,7 +188,7 @@ leafletProxy <- function(mapId, session = shiny::getDefaultReactiveDomain(),
 # dependency and remove this entire mechanism.
 sessionFlushQueue = new.env(parent = emptyenv())
 
-invokeRemote = function(map, method, args = list()) {
+invokeRemote <- function(map, method, args = list()) {
   if (!inherits(map, "leaflet_proxy"))
     stop("Invalid map parameter; map proxy object was expected")
 
@@ -217,16 +243,52 @@ invokeRemote = function(map, method, args = list()) {
   } else {
     sess$sendCustomMessage("leaflet-calls", msg)
   }
+  map
 }
 
 # A helper function to generate the body of function(x, y) list(x = x, y = y),
 # to save some typing efforts in writing tileOptions(), markerOptions(), ...
-makeListFun = function(list) {
+makeListFun <- function(list) {
   if (is.function(list)) list = formals(list)
   nms = names(list)
   cat(sprintf('list(%s)\n', paste(nms, nms, sep = ' = ', collapse = ', ')))
 }
 
-"%||%" = function(a, b) {
+"%||%" <- function(a, b) {
   if (!is.null(a)) a else b
+}
+
+#' Utility function to check if a coordinates is valid
+#' @param lng vector with longitude values
+#' @param lat vector with latitude values
+#' @param funcName Name of calling function
+#' @param warn A boolean. Whether to generate a warning message if there are rows with missing/invalid data
+#' @export
+validateCoords <- function(lng, lat, funcName, warn=T) {
+  if (is.null(lng) && is.null(lat)) {
+    stop(funcName, " requires non-NULL longitude/latitude values")
+  } else if (is.null(lng)) {
+    stop(funcName, " requires non-NULL longitude values")
+  } else if (is.null(lat)) {
+    stop(funcName, " requires non-NULL latitude values")
+  }
+
+  if (!is.numeric(lng) && !is.numeric(lat)) {
+    stop(funcName, " requires numeric longitude/latitude values")
+  } else if (!is.numeric(lng)) {
+    stop(funcName, " requires numeric longitude values")
+  } else if (!is.numeric(lat)) {
+    stop(funcName, " requires numeric latitude values")
+  }
+  complete <- ifelse(
+    is.na(lat) | is.null(lat) | is.na(lng) | is.null(lng) |
+      !is.numeric(lat) | !is.numeric(lng),
+    FALSE, TRUE)
+
+  if(any(!complete)) {
+    warning(sprintf("Data contains %s rows with either missing or invalid lat/lon values and will be ignored",sum(!complete)))
+  }
+
+  data.frame(lng=lng,lat=lat)
+
 }

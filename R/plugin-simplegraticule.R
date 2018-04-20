@@ -23,28 +23,26 @@ leafletSimpleGraticuleDependencies <- function() {
 #' @param layerId the layer id
 #' @param group the name of the group this layer belongs to.
 #' @examples
-#' library(leaflet)
-#'
-#' leaflet() %>%
+#' \donttest{leaflet() %>%
 #'   addTiles() %>%
-#'   addSimpleGraticule()
+#'   addSimpleGraticule()}
 #'
 #' @export
 addSimpleGraticule <- function(
   map,
   interval = 20,
   showOriginLabel = TRUE,
-  redraw = 'move',
+  redraw = "move",
   hidden = FALSE,
   zoomIntervals = list(),
   layerId = NULL,
-  group=NULL
+  group = NULL
 ) {
   map$dependencies <- c(map$dependencies, leafletSimpleGraticuleDependencies())
   invokeMethod(
     map
     , getMapData(map)
-    , 'addSimpleGraticule'
+    , "addSimpleGraticule"
     , interval
     , showOriginLabel
     , redraw

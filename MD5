@@ -1,15 +1,16 @@
-ba04ae2b1a41a58dc8b8f4f3964a5f6d *DESCRIPTION
+abb8742f22dbb2101c63cc06b252bc25 *DESCRIPTION
 7c09edd763d9f017a11417fe595afe14 *LICENSE.note
-71e0a3241b201661d074f6263f492fd5 *NAMESPACE
-e525bff96f2d3bce2ca708899226c4c2 *NEWS
+d6df455302c04b16f45165c5d5523ae6 *NAMESPACE
+35926274ef93bcbc2da753d8986d2ef2 *NEWS
 920ebaca537659a0d3f935e826e9388e *R/colors.R
 2e49cbb932b22e00607dff6e557231a7 *R/controls.R
 38c70800adeccd442f7418790bfe012d *R/data.R
 b160927bdb637e2c6aa9299214bde1f9 *R/dependencies.R
 1c4e766dd2bcf6db1f85e09dc75edbcc *R/layers.R
-082c6d244eb51e4d81f2a932c8fbf604 *R/leaflet.R
+abd7b82544c415b831a1569d21db6ad1 *R/leaflet.R
 83b659de04319adfbc1f27300488fef8 *R/legacy.R
 e197238fee8c90dade8b61b20177f5d4 *R/legend.R
+bda578fcb17a3cb2059698f4da44b870 *R/mapPane.R
 6bc161bfa691329ff591a74693d6aaef *R/methods.R
 d88452d4c6c9ed2bcf01638b4ac7572a *R/normalize-SharedData.R
 d276b6cdd82c96a2d38d943e536c6abc *R/normalize-map.R
@@ -36,7 +37,7 @@ ec055a7a1bf1161de6125d6fe8585a18 *data/atlStorms2005.rda
 c21881f24c392e099e2771534bca5c46 *data/gadmCHE.rda
 509687705efa2096969dab786660a34e *data/providers.details.rda
 a5b7769a32b759ac830b1a7a3b17f680 *data/providers.rda
-d2d8ecf32b555959b2c21b49220a345a *inst/htmlwidgets/leaflet.js
+8914447f6c7109036bdd5071cb067a1b *inst/htmlwidgets/leaflet.js
 e255ba877beaf70c27994b66bfea6d10 *inst/htmlwidgets/leaflet.yaml
 4f252523d4af0b478c810c2547a63e19 *inst/htmlwidgets/lib/jquery/jquery.min.js
 cfe6f6ffc5b2d6c482c36c68522f0282 *inst/htmlwidgets/lib/leaflet-measure/images/cancel.png
@@ -70,7 +71,7 @@ a6137456ed160d7606981aa57c559898 *inst/htmlwidgets/lib/leaflet/images/layers.png
 244e15299eb3715351e6cc53bf49aaba *inst/htmlwidgets/lib/leaflet/leaflet.js
 f4b863df17301af3515da5260a02d2d2 *inst/htmlwidgets/lib/leafletfix/leafletfix.css
 978c1bee49d7ad5fc1a4d81099b13e18 *inst/htmlwidgets/lib/rstudio_leaflet/images/1px.png
-977a60b82748b229f056f0d0bb9fe7c1 *inst/htmlwidgets/lib/rstudio_leaflet/rstudio_leaflet.css
+71ac350889ff148fab73f0a9450addda *inst/htmlwidgets/lib/rstudio_leaflet/rstudio_leaflet.css
 8d5bb5c9f7c8b44323050d228cf958eb *inst/htmlwidgets/plugins/Leaflet-MiniMap/Control.MiniMap.css
 7845ce4f15c0291792432038953e4f49 *inst/htmlwidgets/plugins/Leaflet-MiniMap/Control.MiniMap.js
 c52bf3e2627d2f3b4ddc281b5e4e8112 *inst/htmlwidgets/plugins/Leaflet-MiniMap/Control.MiniMap.min.css
@@ -158,6 +159,7 @@ d67209ac0638c3992e9e72e0072b026d *man/addAwesomeMarkers.Rd
 14f3c86afd3ec4bca7ad8cff2d09b81b *man/addGraticule.Rd
 31ff433c173867b1f73d79ff74555e32 *man/addLayersControl.Rd
 9eb6105f9a69dad1bbd49faee23f2d62 *man/addLegend.Rd
+6a52e5b9198b302e25c64dac5af0789b *man/addMapPane.Rd
 1bd6dc76a7fde0e2a7a6566b0eff988e *man/addMeasure.Rd
 350196edbc7e0bc7f7547bd1d629f129 *man/addMiniMap.Rd
 f3ccf1634aefd9e5ee92022dfe9bcc41 *man/addProviderTiles.Rd
@@ -185,9 +187,10 @@ e20f07e609c0366b5b1c1624420bb971 *man/getMapData.Rd
 9aea09417b306f622bdc9d5c293cf4d8 *man/iconList.Rd
 c31334359e619e7c0e90a6118d890f79 *man/icons.Rd
 51c05d221cd7033d9b337a21fd666681 *man/leaflet-imports.Rd
-eaa787a904844425d1ad682a143de832 *man/leaflet.Rd
+f6cc431aa36127b933d997df74d16904 *man/leaflet.Rd
 e459eacadd8131f0cc14d2630d23c09f *man/leafletDependencies.Rd
 8c0360186effcfe45fc1d52af5ab4c68 *man/leafletProxy.Rd
+d3460efb8ff60453d02d35fedf83b620 *man/leafletSizingPolicy.Rd
 39b79073f153f9c50ed2f0781eb6ecca *man/makeAwesomeIcon.Rd
 4f93227ea3137160582683631d75c89a *man/makeIcon.Rd
 4d5a88d8abcc4eaf334df438c66925ad *man/map-layers.Rd
@@ -211,5 +214,5 @@ afd15c482fc0d1d5523d9ff3bc89e5c0 *tests/testit/test-legend.R
 565bc34c46fa8eb012fa03e19cf42d61 *tests/testit/test-utils.R
 4a40abd2a1926979503e714747891561 *tests/testthat.R
 5a9880bb0ab5cfab727c31aae12a998b *tests/testthat/test-colors.R
-b0d186940d10174b6e8c93fde188c62a *tests/testthat/test-normalize-2.R
+f303a765ce26f5c55cd185d21e47b4c6 *tests/testthat/test-normalize-2.R
 5f3e9844205c43ce49c73620710cb708 *tests/testthat/test-normalize.R

@@ -458,8 +458,8 @@ WMSTileOptions <- function(
 #'   the latitude column from \code{data})
 #' @param popup a character vector of the HTML content for the popups (you are
 #'   recommended to escape the text using \code{\link[htmltools]{htmlEscape}()}
-#' @param popupOptions A Vector of \code{\link{popupOptions}} to provide popups
 #'   for security reasons)
+#' @param popupOptions A Vector of \code{\link{popupOptions}} to provide popups
 #' @param layerId the layer id
 #' @param group the name of the group the newly created layers should belong to
 #'   (for \code{\link{clearGroup}} and \code{\link{addLayersControl}} purposes).
@@ -1051,7 +1051,7 @@ pathOptions <- function(
 #' Options to highlight shapes (polylines/polygons/circles/rectangles)
 #' @param bringToFront Whether the shape should be brought to front on hover.
 #' @param sendToBack whether the shape should be sent to back on mouse out.
-#' @describeIn map-layers Options to highligh a shape on hover
+#' @describeIn map-layers Options to highlight a shape on hover
 #' @export
 highlightOptions <- function(
   stroke = NULL,

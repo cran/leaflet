@@ -7,19 +7,45 @@
 \alias{colorFactor}
 \title{Color mapping}
 \usage{
-colorNumeric(palette, domain, na.color = "#808080", alpha = FALSE,
-  reverse = FALSE)
+colorNumeric(
+  palette,
+  domain,
+  na.color = "#808080",
+  alpha = FALSE,
+  reverse = FALSE
+)
 
-colorBin(palette, domain, bins = 7, pretty = TRUE,
-  na.color = "#808080", alpha = FALSE, reverse = FALSE,
-  right = FALSE)
+colorBin(
+  palette,
+  domain,
+  bins = 7,
+  pretty = TRUE,
+  na.color = "#808080",
+  alpha = FALSE,
+  reverse = FALSE,
+  right = FALSE
+)
 
-colorQuantile(palette, domain, n = 4, probs = seq(0, 1, length.out = n
-  + 1), na.color = "#808080", alpha = FALSE, reverse = FALSE,
-  right = FALSE)
+colorQuantile(
+  palette,
+  domain,
+  n = 4,
+  probs = seq(0, 1, length.out = n + 1),
+  na.color = "#808080",
+  alpha = FALSE,
+  reverse = FALSE,
+  right = FALSE
+)
 
-colorFactor(palette, domain, levels = NULL, ordered = FALSE,
-  na.color = "#808080", alpha = FALSE, reverse = FALSE)
+colorFactor(
+  palette,
+  domain,
+  levels = NULL,
+  ordered = FALSE,
+  na.color = "#808080",
+  alpha = FALSE,
+  reverse = FALSE
+)
 }
 \arguments{
 \item{palette}{The colors or color function that values will be mapped to}
@@ -110,19 +136,19 @@ The \code{palette} argument can be any of the following:
 pal <- colorBin("Greens", domain = 0:100)
 pal(runif(10, 60, 100))
 
-\donttest{
- # Exponential distribution, mapped continuously
- previewColors(colorNumeric("Blues", domain = NULL), sort(rexp(16)))
- # Exponential distribution, mapped by interval
- previewColors(colorBin("Blues", domain = NULL, bins = 4), sort(rexp(16)))
- # Exponential distribution, mapped by quantile
- previewColors(colorQuantile("Blues", domain = NULL), sort(rexp(16)))
+if (interactive()) {
+  # Exponential distribution, mapped continuously
+  previewColors(colorNumeric("Blues", domain = NULL), sort(rexp(16)))
+  # Exponential distribution, mapped by interval
+  previewColors(colorBin("Blues", domain = NULL, bins = 4), sort(rexp(16)))
+  # Exponential distribution, mapped by quantile
+  previewColors(colorQuantile("Blues", domain = NULL), sort(rexp(16)))
 
- # Categorical data; by default, the values being colored span the gamut...
- previewColors(colorFactor("RdYlBu", domain = NULL), LETTERS[1:5])
- # ...unless the data is a factor, without droplevels...
- previewColors(colorFactor("RdYlBu", domain = NULL), factor(LETTERS[1:5], levels = LETTERS))
- # ...or the domain is stated explicitly.
- previewColors(colorFactor("RdYlBu", levels = LETTERS), LETTERS[1:5])
+  # Categorical data; by default, the values being colored span the gamut...
+  previewColors(colorFactor("RdYlBu", domain = NULL), LETTERS[1:5])
+  # ...unless the data is a factor, without droplevels...
+  previewColors(colorFactor("RdYlBu", domain = NULL), factor(LETTERS[1:5], levels = LETTERS))
+  # ...or the domain is stated explicitly.
+  previewColors(colorFactor("RdYlBu", levels = LETTERS), LETTERS[1:5])
 }
 }

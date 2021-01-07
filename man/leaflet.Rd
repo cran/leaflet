@@ -6,17 +6,37 @@
 \alias{leafletCRS}
 \title{Create a Leaflet map widget}
 \usage{
-leaflet(data = NULL, width = NULL, height = NULL, padding = 0,
-  options = leafletOptions(), elementId = NULL,
-  sizingPolicy = leafletSizingPolicy(padding = padding))
+leaflet(
+  data = NULL,
+  width = NULL,
+  height = NULL,
+  padding = 0,
+  options = leafletOptions(),
+  elementId = NULL,
+  sizingPolicy = leafletSizingPolicy(padding = padding)
+)
 
-leafletOptions(minZoom = NULL, maxZoom = NULL, crs = leafletCRS(),
-  worldCopyJump = NULL, preferCanvas = NULL, ...)
+leafletOptions(
+  minZoom = NULL,
+  maxZoom = NULL,
+  crs = leafletCRS(),
+  worldCopyJump = NULL,
+  preferCanvas = NULL,
+  ...
+)
 
-leafletCRS(crsClass = "L.CRS.EPSG3857", code = NULL, proj4def = NULL,
-  projectedBounds = NULL, origin = NULL, transformation = NULL,
-  scales = NULL, resolutions = NULL, bounds = NULL,
-  tileSize = NULL)
+leafletCRS(
+  crsClass = "L.CRS.EPSG3857",
+  code = NULL,
+  proj4def = NULL,
+  projectedBounds = NULL,
+  origin = NULL,
+  transformation = NULL,
+  scales = NULL,
+  resolutions = NULL,
+  bounds = NULL,
+  tileSize = NULL
+)
 }
 \arguments{
 \item{data}{a data object. Currently supported objects are matrices, data
@@ -236,8 +256,8 @@ m \%>\% setView(-122.36075812146, 47.6759920119894, zoom = 13) \%>\% addGeoJSON(
 # use the Dark Matter layer from CartoDB
 leaflet() \%>\% addTiles("http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
   attribution = paste(
-    "&copy; <a href=\\"http://openstreetmap.org\\">OpenStreetMap</a> contributors",
-    "&copy; <a href=\\"http://cartodb.com/attributions\\">CartoDB</a>"
+    "&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors",
+    "&copy; <a href=\"http://cartodb.com/attributions\">CartoDB</a>"
   )
 ) \%>\% setView(-122.36, 47.67, zoom = 10)
 
@@ -267,5 +287,5 @@ m \%>\% addCircleMarkers(~lng, ~lat, radius = ~size,
 \seealso{
 \code{\link{leafletCRS}} for creating a custom CRS.
 
-See \url{http://leafletjs.com/reference-1.3.1.html#map-option} for details and more options.
+See \url{https://leafletjs.com/reference-1.3.4.html#map-option} for details and more options.
 }

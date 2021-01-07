@@ -5,15 +5,27 @@
 \title{Add a minimap to the Map
 \url{https://github.com/Norkart/Leaflet-MiniMap}}
 \usage{
-addMiniMap(map, position = "bottomright", width = 150, height = 150,
-  collapsedWidth = 19, collapsedHeight = 19, zoomLevelOffset = -5,
-  zoomLevelFixed = FALSE, centerFixed = FALSE, zoomAnimation = FALSE,
-  toggleDisplay = FALSE, autoToggleDisplay = FALSE,
-  minimized = FALSE, aimingRectOptions = list(color = "#ff7800", weight
-  = 1, clickable = FALSE), shadowRectOptions = list(color = "#000000",
-  weight = 1, clickable = FALSE, opacity = 0, fillOpacity = 0),
+addMiniMap(
+  map,
+  position = "bottomright",
+  width = 150,
+  height = 150,
+  collapsedWidth = 19,
+  collapsedHeight = 19,
+  zoomLevelOffset = -5,
+  zoomLevelFixed = FALSE,
+  centerFixed = FALSE,
+  zoomAnimation = FALSE,
+  toggleDisplay = FALSE,
+  autoToggleDisplay = FALSE,
+  minimized = FALSE,
+  aimingRectOptions = list(color = "#ff7800", weight = 1, clickable = FALSE),
+  shadowRectOptions = list(color = "#000000", weight = 1, clickable = FALSE, opacity =
+    0, fillOpacity = 0),
   strings = list(hideText = "Hide MiniMap", showText = "Show MiniMap"),
-  tiles = NULL, mapOptions = list())
+  tiles = NULL,
+  mapOptions = list()
+)
 }
 \arguments{
 \item{map}{a map widget object}
@@ -59,11 +71,11 @@ Especially useful when 'zoomLevelFixed' is set.}
 \item{minimized}{Sets whether the minimap should start in a minimized position.}
 
 \item{aimingRectOptions}{Sets the style of the aiming rectangle by passing in
-a Path.Options (\url{http://leafletjs.com/reference-1.3.1.html#path-options}) object.
+a Path.Options (\url{https://leafletjs.com/reference-1.3.4.html#path-options}) object.
 (Clickable will always be overridden and set to false.)}
 
 \item{shadowRectOptions}{Sets the style of the aiming shadow rectangle by passing in
-a Path.Options (\url{http://leafletjs.com/reference-1.3.1.html#path-option}) object.
+a Path.Options (\url{https://leafletjs.com/reference-1.3.4.html#path-option}) object.
 (Clickable will always be overridden and set to false.)}
 
 \item{strings}{Overrides the default strings allowing for translation.}

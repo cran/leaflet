@@ -5,12 +5,23 @@
 \alias{providerTileOptions}
 \title{Add a tile layer from a known map provider}
 \usage{
-addProviderTiles(map, provider, layerId = NULL, group = NULL,
-  options = providerTileOptions())
+addProviderTiles(
+  map,
+  provider,
+  layerId = NULL,
+  group = NULL,
+  options = providerTileOptions()
+)
 
-providerTileOptions(errorTileUrl = "", noWrap = FALSE,
-  opacity = NULL, zIndex = NULL, updateWhenIdle = NULL,
-  detectRetina = FALSE, ...)
+providerTileOptions(
+  errorTileUrl = "",
+  noWrap = FALSE,
+  opacity = NULL,
+  zIndex = NULL,
+  updateWhenIdle = NULL,
+  detectRetina = FALSE,
+  ...
+)
 }
 \arguments{
 \item{map}{the map to add the tile layer to}
@@ -29,7 +40,7 @@ identifier-style names.}
 \item{options}{tile options}
 
 \item{errorTileUrl, noWrap, opacity, zIndex, updateWhenIdle, detectRetina}{the tile layer options; see
-\url{http://leafletjs.com/reference-1.3.1.html#tilelayer}}
+\url{https://leafletjs.com/reference-1.3.4.html#tilelayer}}
 
 \item{...}{named parameters to add to the options}
 }

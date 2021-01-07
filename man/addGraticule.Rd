@@ -5,9 +5,15 @@
 \title{Add a Graticule on the map
 see \url{https://github.com/turban/Leaflet.Graticule}}
 \usage{
-addGraticule(map, interval = 20, sphere = FALSE, style = list(color =
-  "#333", weight = 1), layerId = NULL, group = NULL,
-  options = pathOptions(pointerEvents = "none", clickable = FALSE))
+addGraticule(
+  map,
+  interval = 20,
+  sphere = FALSE,
+  style = list(color = "#333", weight = 1),
+  layerId = NULL,
+  group = NULL,
+  options = pathOptions(pointerEvents = "none", clickable = FALSE)
+)
 }
 \arguments{
 \item{map}{a map widget object}
@@ -16,7 +22,7 @@ addGraticule(map, interval = 20, sphere = FALSE, style = list(color =
 
 \item{sphere}{boolean. Default FALSE}
 
-\item{style}{path options for the generated lines. See \url{http://leafletjs.com/reference-1.3.1.html#path-option}}
+\item{style}{path options for the generated lines. See \url{https://leafletjs.com/reference-1.3.4.html#path-option}}
 
 \item{layerId}{the layer id}
 

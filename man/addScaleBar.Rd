@@ -6,11 +6,18 @@
 \alias{removeScaleBar}
 \title{Add or remove a scale bar}
 \usage{
-addScaleBar(map, position = c("topright", "bottomright", "bottomleft",
-  "topleft"), options = scaleBarOptions())
+addScaleBar(
+  map,
+  position = c("topright", "bottomright", "bottomleft", "topleft"),
+  options = scaleBarOptions()
+)
 
-scaleBarOptions(maxWidth = 100, metric = TRUE, imperial = TRUE,
-  updateWhenIdle = TRUE)
+scaleBarOptions(
+  maxWidth = 100,
+  metric = TRUE,
+  imperial = TRUE,
+  updateWhenIdle = TRUE
+)
 
 removeScaleBar(map)
 }
@@ -37,7 +44,7 @@ on \code{moveend}.}
 }
 \description{
 Uses Leaflet's built-in
-\href{http://leafletjs.com/reference-1.3.1.html#control-scale}{scale bar}
+\href{https://leafletjs.com/reference-1.3.4.html#control-scale}{scale bar}
 feature to add a scale bar.
 }
 \examples{

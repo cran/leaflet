@@ -116,11 +116,11 @@ formulae will be evaluated in the \code{data}.
 }
 \section{Functions}{
 \itemize{
-\item \code{leafletOptions}: Options for map creation
+\item \code{leafletOptions()}: Options for map creation
 
-\item \code{leafletCRS}: class to create a custom CRS
+\item \code{leafletCRS()}: class to create a custom CRS
+
 }}
-
 \examples{
 # !formatR
 library(leaflet)
@@ -281,5 +281,5 @@ m \%>\% addCircleMarkers(~lng, ~lat, radius = ~size,
 \seealso{
 \code{\link{leafletCRS}} for creating a custom CRS.
 
-See \url{https://leafletjs.com/reference-1.3.4.html#map-option} for details and more options.
+See \url{https://web.archive.org/web/20220702182250/https://leafletjs.com/reference-1.3.4.html#map-option} for details and more options.
 }

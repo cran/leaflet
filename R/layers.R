@@ -162,8 +162,8 @@ addTiles <- function(
   options$attribution <- attribution
   if (missing(urlTemplate) && is.null(options$attribution))
     options$attribution <- paste(
-      "&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap</a>",
-      "contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>"
+      "&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap</a>, ",
+      "<a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL</a>"
     )
   invokeMethod(map, data, "addTiles", urlTemplate, layerId, group,
     options)
@@ -172,12 +172,13 @@ addTiles <- function(
 epsg4326 <- "+proj=longlat +datum=WGS84 +no_defs"
 epsg3857 <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs" # nolint
 
+
 #' Add a raster image as a layer
 #'
-#' Create an image overlay from a \code{RasterLayer} object. \emph{This is only
-#' suitable for small to medium sized rasters}, as the entire image will be
-#' embedded into the HTML page (or passed over the websocket in a Shiny
-#' context).
+#' Create an image overlay from a \code{RasterLayer} or a \code{SpatRaster}
+#' object. \emph{This is only suitable for small to medium sized rasters},
+#' as the entire image will be embedded into the HTML page (or passed over
+#' the websocket in a Shiny context).
 #'
 #' The \code{maxBytes} parameter serves to prevent you from accidentally
 #' embedding an excessively large amount of data into your htmlwidget. This
@@ -187,21 +188,27 @@ epsg3857 <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y
 #' aware that very large rasters may not only make your map a large download but
 #' also may cause the browser to become slow or unresponsive.
 #'
-#' By default, the \code{addRasterImage} function will project the RasterLayer
-#' \code{x} to EPSG:3857 using the \code{raster} package's
-#' \code{\link[raster]{projectRaster}} function. This can be a time-consuming
-#' operation for even moderately sized rasters. Upgrading the \code{raster}
-#' package to 2.4 or later will provide a large speedup versus previous
-#' versions. If you are repeatedly adding a particular raster to your Leaflet
+#' To reduce the size of a SpatRaster, you can use \code{\link[terra]{spatSample}}
+#' as in \code{x = spatSample(x, 100000, method="regular", as.raster=TRUE)}. With
+#' a \code{RasterLayer} you can use \code{\link[raster]{sampleRegular}} as in
+#' \code{sampleRegular(x, 100000, asRaster=TRUE)}.
+#'
+#' By default, the \code{addRasterImage} function will project the raster data
+#' \code{x} to the Pseudo-Mercator projection (EPSG:3857). This can be a
+#' time-consuming operation for even moderately sized rasters; although it is much
+#' faster for SpatRasters than for RasterLayers.
+#' If you are repeatedly adding a particular raster to your Leaflet
 #' maps, you can perform the projection ahead of time using
 #' \code{projectRasterForLeaflet()}, and call \code{addRasterImage} with
 #' \code{project = FALSE}.
 #'
 #' @param map a map widget object
-#' @param x a \code{RasterLayer} object--see \code{\link[raster]{raster}}
+#' @param x a \code{\link[terra]{SpatRaster}} or a \code{RasterLayer} object--see \code{\link[raster]{raster}}
 #' @param colors the color palette (see \code{\link{colorNumeric}}) or function
 #'   to use to color the raster values (hint: if providing a function, set
-#'   \code{na.color} to \code{"#00000000"} to make \code{NA} areas transparent)
+#'   \code{na.color} to \code{"#00000000"} to make \code{NA} areas transparent).
+#'   The palette is ignored if \code{x} is a SpatRaster with a color table or if
+#'   it has RGB channels.
 #' @param opacity the base opacity of the raster, expressed from 0 to 1
 #' @param attribution the HTML string to show as the attribution for this layer
 #' @param layerId the layer id
@@ -220,6 +227,9 @@ epsg3857 <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y
 #'   (before base64 encoding); defaults to 4MB.
 #' @template data-getMapData
 #'
+#' @seealso \code{\link{addRasterLegend}} for an easy way to add a legend for a
+#'   SpatRaster with a color table.
+#'
 #' @examples
 #' \donttest{library(raster)
 #'
@@ -227,15 +237,16 @@ epsg3857 <- "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y
 #' values(r) <- matrix(1:900, nrow(r), ncol(r), byrow = TRUE)
 #' crs(r) <- CRS("+init=epsg:4326")
 #'
-#' if (requireNamespace("rgdal")) {
-#'   leaflet() %>% addTiles() %>%
-#'     addRasterImage(r, colors = "Spectral", opacity = 0.8)
-#' }}
+#' pal <- colorNumeric("Spectral", domain = c(0, 1000))
+#' leaflet() %>% addTiles() %>%
+#'   addRasterImage(r, colors = pal, opacity = 0.8) %>%
+#'   addLegend(pal = pal, values = c(0, 1000))
+#' }
 #' @export
 addRasterImage <- function(
   map,
   x,
-  colors = if (raster::is.factor(x)) "Set1" else "Spectral",
+  colors = if (is.factor(x)[1]) "Set1" else "Spectral",
   opacity = 1,
   attribution = NULL,
   layerId = NULL,
@@ -245,7 +256,142 @@ addRasterImage <- function(
   maxBytes = 4 * 1024 * 1024,
   data = getMapData(map)
 ) {
-  stopifnot(inherits(x, "RasterLayer"))
+  if (inherits(x, "SpatRaster")) {
+    addRasterImage_SpatRaster(
+      map=map,
+      x=x,
+      colors = colors,
+      opacity = opacity,
+      attribution = attribution,
+      layerId = layerId,
+      group = group,
+      project = project,
+      method = method,
+      maxBytes = maxBytes,
+      data = data
+    )
+  } else if (inherits(x, "RasterLayer")) {
+    addRasterImage_RasterLayer(
+      map=map,
+      x=x,
+      colors = colors,
+      opacity = opacity,
+      attribution = attribution,
+      layerId = layerId,
+      group = group,
+      project = project,
+      method = method,
+      maxBytes = maxBytes,
+      data = data
+    )
+  } else {
+    stop("Don't know how to get path data from object of class ", class(x)[[1]])
+  }
+}
+
+
+#' Add a color legend for a SpatRaster to a map
+#'
+#' A function for adding a [legend][addLegend()] that is specifically designed
+#' for [terra::SpatRaster] objects, with categorical values, that carry their
+#' own [color table][terra::coltab()].
+#'
+#' @param map a map widget object
+#' @param x a [SpatRaster][terra::SpatRaster] object with a color table
+#' @param layer the layer of the raster to target
+#' @param ... additional arguments to pass through to [addLegend()]
+#' @seealso [addRasterImage()]
+#' @examplesIf interactive()
+#'
+#' library(terra)
+#'
+#' r <- rast("/vsicurl/https://geodata.ucdavis.edu/test/pr_nlcd.tif")
+#' leaflet() %>%
+#'   addTiles() %>%
+#'   addRasterImage(r, opacity = 0.75) %>%
+#'   addRasterLegend(r, opacity = 0.75)
+#'
+#' plot.new() # pause in interactive mode
+#'
+#' rr <- r
+#' levels(rr)  <- NULL
+#' leaflet() %>%
+#'   addTiles() %>%
+#'   addRasterImage(rr, opacity = 0.75) %>%
+#'   addRasterLegend(rr, opacity = 0.75)
+#'
+#' @md
+#' @export
+addRasterLegend <- function(map, x, layer = 1, ...) {
+  stopifnot(inherits(x, "SpatRaster"))
+  stopifnot(length(layer) == 1 && layer > 0 && layer <= terra::nlyr(x))
+
+  # might as well do this here and only once. Subsetting would otherwise have
+  # been necessary in
+  # color_info <- base::subset(color_info, value %in% terra::values(x))
+  x <- x[[layer]]
+
+
+  # Retrieve the color table from the layer. If one doesn't exist, that means
+  # the raster was colored some other way, like using colorFactor or something,
+  # and the regular addLegend() is designed for those cases.
+  ct <- terra::coltab(x)[[1]]
+  if (is.null(ct)) {
+    stop("addRasterLegend() can only be used on layers with color tables (see ?terra::coltab). Otherwise, use addLegend().")
+  }
+
+  # Create a data frame that has value and color columns
+  # Extract the colors in #RRGGBBAA format
+  color_info <- data.frame(
+    value = ct[[1]],
+    color = grDevices::rgb(ct$red / 255, ct$green / 255, ct$blue / 255, ct$alpha / 255)
+  )
+
+  lvls <- terra::levels(x)[[1]]
+
+  # Drop values that aren't part of the layer unlike "values",  "unique" is
+  # memory-safe; it does not load all values into memory if the raster is large.
+  # So instead of:
+  #
+  #  color_info <- base::subset(color_info, value %in% terra::values(x))
+  #
+  # remove the levels to get the raw cell values
+  levels(x) <- NULL
+  value_in_layer <- color_info$value %in% terra::unique(x)[[1]]
+  color_info <- color_info[value_in_layer & !is.na(value_in_layer), ]
+
+  res <- if (is.data.frame(lvls)) {
+    # Use the labels from levels(x), and look up the matching colors.
+    # The levels data frame can have varying colnames, just normalize them
+    colnames(lvls) <- c("value", "label")
+    base::merge(color_info, lvls, by.x = "value", by.y = 1)
+  } else {
+    # No level labels provided; use the values as labels
+    cbind(color_info, label = color_info$value)
+  }
+
+  # At this point, res is a data frame with `value`, `color`, and `label` cols,
+  # and values/colors not present in the raster layer have been dropped
+
+  addLegend(map, colors = res[["color"]], labels = res[["label"]], ...)
+}
+
+
+
+addRasterImage_RasterLayer <- function(
+  map,
+  x,
+  colors = if (is.factor(x)[1]) "Set1" else "Spectral",
+  opacity = 1,
+  attribution = NULL,
+  layerId = NULL,
+  group = NULL,
+  project = TRUE,
+  method = c("auto", "bilinear", "ngb"),
+  maxBytes = 4 * 1024 * 1024,
+  data = getMapData(map)
+) {
+
 
   raster_is_factor <- raster::is.factor(x)
   method <- match.arg(method)
@@ -260,11 +406,6 @@ addRasterImage <- function(
   if (project) {
     # if we should project the data
     projected <- projectRasterForLeaflet(x, method)
-
-    # if data is factor data, make the result factors as well.
-    if (raster_is_factor) {
-      projected <- raster::as.factor(projected)
-    }
   } else {
     # do not project data
     projected <- x
@@ -296,8 +437,7 @@ addRasterImage <- function(
       maxBytes, " bytes"
     )
   }
-  encoded <- base64enc::base64encode(pngData)
-  uri <- paste0("data:image/png;base64,", encoded)
+  uri <- xfun::base64_uri(pngData, "image/png")
 
   latlng <- list(
     list(raster::ymax(bounds), raster::xmin(bounds)),
@@ -311,14 +451,140 @@ addRasterImage <- function(
     )
 }
 
+addRasterImage_SpatRaster <- function(
+  map,
+  x,
+  colors = if (terra::is.factor(x)[1]) "Set1" else "Spectral",
+  opacity = 1,
+  attribution = NULL,
+  layerId = NULL,
+  group = NULL,
+  project = TRUE,
+  method = c("auto", "bilinear", "ngb"),
+  maxBytes = 4 * 1024 * 1024,
+  data = getMapData(map)
+) {
+  if (!is_installed("terra", "1.6-3")) { # for terra::has.RGB()
+    stop(
+      "`addRasterImage()` for SpatRaster objects requires {terra} 1.6-3 or higher",
+      call. = FALSE
+    )
+  }
+
+  if (terra::has.RGB(x)) {
+    # RGB(A) channels to color table
+    x <- terra::colorize(x, "col")
+  } else if (terra::nlyr(x) > 1) {
+    x <- x[[1]]
+    warning("using the first layer in 'x'", call. = FALSE)
+  }
+
+  raster_is_factor <- terra::is.factor(x)
+
+  # there 1.5-50 has terra::has.colors(x)
+  ctab <- terra::coltab(x)[[1]]
+  has_colors <- !is.null(ctab)
+
+  method <- match.arg(method)
+  if (method == "ngb") method = "near"
+  if (method == "auto") {
+    if (raster_is_factor || has_colors) {
+      method <- "near"
+    } else {
+      method <- "bilinear"
+    }
+  }
+
+  bounds <- terra::ext(
+    terra::project(
+      terra::project(
+        terra::as.points(terra::ext(x), crs=terra::crs(x)),
+        epsg3857),
+      epsg4326)
+  )
+## can't the above be simplified to this?
+#  bounds <- terra::ext(
+#    terra::project(
+#        terra::as.points(terra::ext(x), crs=terra::crs(x)),
+#        epsg4326)
+#  )
+
+  if (project) {
+    # if we should project the data
+    x <- projectRasterForLeaflet(x, method)
+    if (method=="bilinear") {
+      has_colors <- FALSE
+    }
+  }
+
+  if (!is.function(colors)) {
+    if (method == "near" || has_colors) {
+      # 'factors'
+      domain <- NULL
+      if (has_colors) {
+        colors <- rgb(ctab[,2], ctab[,3], ctab[,4], ctab[,5], maxColorValue=255)
+        domain <- ctab[,1]
+      }
+      colors <- colorFactor(colors, domain = domain, na.color = "#00000000", alpha = TRUE)
+    } else {
+      # 'numeric'
+      colors <- colorNumeric(colors, domain = NULL, na.color = "#00000000", alpha = TRUE)
+    }
+  }
+
+  tileData <- terra::values(x) %>% as.vector() %>% colors() %>% col2rgb(alpha = TRUE) %>% as.raw()
+  dim(tileData) <- c(4, ncol(x), nrow(x))
+  pngData <- png::writePNG(tileData)
+  if (length(pngData) > maxBytes) {
+    stop(
+      "Raster image too large; ", length(pngData), " bytes is greater than maximum ",
+      maxBytes, " bytes"
+    )
+  }
+  uri <- xfun::base64_uri(pngData, "image/png")
+
+  latlng <- list(
+    list(terra::ymax(bounds), terra::xmin(bounds)),
+    list(terra::ymin(bounds), terra::xmax(bounds))
+  )
+
+  invokeMethod(map, data, "addRasterImage", uri, latlng, opacity, attribution, layerId, group) %>%
+    expandLimits(
+      c(terra::ymin(bounds), terra::ymax(bounds)),
+      c(terra::xmin(bounds), terra::xmax(bounds))
+    )
+}
+
+
+
 #' @rdname addRasterImage
 #' @export
 projectRasterForLeaflet <- function(x, method) {
-  raster::projectRaster(
-    x,
-    raster::projectExtent(x, crs = sp::CRS(epsg3857)),
-    method = method
-  )
+  if (inherits(x, "SpatRaster")) {
+    if (method=="ngb") {
+      method = "near"
+    }
+    terra::project(
+      x,
+      y=epsg3857,
+      method=method
+    )
+  } else {
+    raster_is_factor <- raster::is.factor(x);
+    projected <- raster::projectRaster(
+      x,
+      raster::projectExtent(x, crs = sp::CRS(epsg3857)),
+      method = method
+    )
+    # if data is factor data, make the result factors as well.
+    # only meaningful if ngb was used
+    if ((raster_is_factor) && (method == "ngb")) {
+      raster::as.factor(projected)
+    } else {
+      projected
+    }
+
+  }
 }
 
 #' @rdname remove
@@ -864,12 +1130,9 @@ b64EncodePackedIcons <- function(packedIcons) {
   if (is.null(packedIcons))
     return(packedIcons)
 
-  # TODO: remove this when we've got our own encoding function
-  markdown::markdownToHTML
-  image_uri <- getFromNamespace(".b64EncodeFile", "markdown")
   packedIcons$data <- sapply(packedIcons$data, function(icon) {
     if (is.character(icon) && file.exists(icon)) {
-      image_uri(icon)
+      xfun::base64_uri(icon)
     } else {
       icon
     }

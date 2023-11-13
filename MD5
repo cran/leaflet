@@ -1,12 +1,12 @@
-9cfe5d6839de24614f5ddf6d08b00747 *DESCRIPTION
+97acd292fb0b09ae93ed3234d33019c0 *DESCRIPTION
 02c68b412f7a40aec5fbbbff2b62ed02 *LICENSE.note
 c51040bbfc0fb2c20e76459b2e5515bd *NAMESPACE
-761f80a06a645f6695e148c9abdf56b0 *NEWS.md
+9c8e1b367362244b398cd100b70f11a0 *NEWS.md
 a31997cf0d47360bf88213067c0fad87 *R/colors.R
 2e49cbb932b22e00607dff6e557231a7 *R/controls.R
 d7458e6d57ec9865099d6320d24ca265 *R/data.R
 646b89b6cdead24e836ad44796448c9f *R/dependencies.R
-fc9a67b32f548d30591a3349c48a613c *R/layers.R
+2a6e658dacc95bd893a8af700f0594b0 *R/layers.R
 611f50a79597d5ef51201a8ec2e76bcb *R/leaflet-package.R
 a9db6dd2a43c79a4da4892dd7217a3f2 *R/leaflet.R
 8c412c54ce4e459c0ef81adbe107cda5 *R/legacy.R
@@ -25,7 +25,7 @@ b543d1eeb2874903d274e4018b46f325 *R/plugin-easybutton.R
 64850db786f32d00556e48790b0f9a96 *R/plugin-measure.R
 00643decbdda8519714fdbcd0f1d1362 *R/plugin-minimap.R
 acf69058fc08211d228a64de4de82d8f *R/plugin-omnivore.R
-dd0416da67d2c789b7c7f686f7605b32 *R/plugin-providers.R
+89fe536eb32318db253acd21ba4fb248 *R/plugin-providers.R
 e63528108f00c4284768e1c8aec339c7 *R/plugin-simplegraticule.R
 e8e0c489fbd96907e220fa8a31377217 *R/plugin-terminator.R
 b36c4adfe91468f899b081db8038badd *R/scalebar.R
@@ -33,7 +33,7 @@ c4adc8fa61b9e1734415e1eda345208f *R/selection.R
 9ae26ceba85cb4d70de4e71adb7367a1 *R/shiny.R
 5b5faeac9c5718857c41c856f84b3609 *R/staticimports.R
 936011c2bf4059bf64a2e9674db7bd89 *R/utils.R
-114b76f2691d1e81802c8e7bcf7c9049 *R/zzz.R
+7eda669ecc621873498f201406c53c52 *R/zzz.R
 6d41d794f96c4fa5823c69d889f8f328 *R/zzz_viztest.R
 13e1f1c39862d600f12b28c8dc5811eb *README.md
 450cc924faa533d3046a3a632f7a71f3 *data/atlStorms2005.rda
@@ -194,7 +194,7 @@ bb447593d700d2890cc24b4ddcab22f0 *man/makeAwesomeIcon.Rd
 6c71c32328ceefd458f9687b1da353bb *man/makeIcon.Rd
 b574b52b61916fdaa8dd682e08cdb123 *man/map-layers.Rd
 ac9b6fc415b7fae38425ab971389d621 *man/map-methods.Rd
-3b09b8a72c2900f3d7b4eaf7a6abb64e *man/map-options.Rd
+100af78f578f539c125b50e1dc485fb0 *man/map-options.Rd
 81a76a6b1594cc75f2fc145d4b19dccb *man/map-shiny.Rd
 1ba5e5e9d9c478ffc0dd1b6251d4d3a7 *man/mapOptions.Rd
 3eee10195b61e7dbf0cf692e3558457a *man/previewColors.Rd

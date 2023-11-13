@@ -2,7 +2,7 @@ Type: Package
 Package: leaflet
 Title: Create Interactive Web Maps with the JavaScript 'Leaflet'
         Library
-Version: 2.2.0
+Version: 2.2.1
 Authors@R: c(
     person("Joe", "Cheng", , "joe@posit.co", role = c("aut", "cre")),
     person("Barret", "Schloerke", , "barret@posit.co", role = "aut",
@@ -50,7 +50,7 @@ URL: https://rstudio.github.io/leaflet/,
 BugReports: https://github.com/rstudio/leaflet/issues
 Depends: R (>= 3.1.0)
 Imports: crosstalk, htmltools, htmlwidgets (>= 1.5.4), jquerylib,
-        leaflet.providers (>= 1.8.0), magrittr, methods, png, raster
+        leaflet.providers (>= 2.0.0), magrittr, methods, png, raster
         (>= 3.6.3), RColorBrewer, scales (>= 1.0.0), sp, stats, viridis
         (>= 0.5.1), xfun
 Suggests: knitr, maps, purrr, R6, RJSONIO, s2, sf (>= 0.9-6), shiny,
@@ -60,7 +60,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2023-08-30 20:51:10 UTC; garrick
+Packaged: 2023-11-13 16:37:47 UTC; garrick
 Author: Joe Cheng [aut, cre],
   Barret Schloerke [aut] (<https://orcid.org/0000-0001-9986-114X>),
   Bhaskar Karambelkar [aut],
@@ -84,4 +84,4 @@ Author: Joe Cheng [aut, cre],
   Posit Software, PBC [cph, fnd]
 Maintainer: Joe Cheng <joe@posit.co>
 Repository: CRAN
-Date/Publication: 2023-08-31 07:30:06 UTC
+Date/Publication: 2023-11-13 21:43:18 UTC
